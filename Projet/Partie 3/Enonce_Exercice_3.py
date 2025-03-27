@@ -127,25 +127,45 @@ def cross_correlation1D(X, F):
 # Ces lignes permettent de tester les fonctions de convolutions et cross_correlation
 # Les decommenter une fois que vos fonctions sont implementees
 # # Convolution avec F_1
+"""
+
+"""
 print("Convolution avec F_1 = [1,2,1] et F_1_norm = [0.25,0.5,0.25] :")
 print("Convolution X_1*F_1 : ", convolution1D(X_1, F_1)) #[80, 0, 0, 0, 80]
 print("Convolution X_1*F_1_norm : ", convolution1D(X_1, F_1_norm)) # [20.0, 0.0, 0.0, 0.0, 20.0]
+print("Cross_correlation X_1*F_1 : ", cross_correlation1D(X_1, F_1))
 print("Convolution X_2*F_1 : ", convolution1D(X_2, F_1)) #[110, 40, 20, 40, 110]
 print("Convolution X_2*F_1_norm : ", convolution1D(X_2, F_1_norm)) #[27.5, 10.0, 5.0, 10.0, 27.5]
+print("Cross_correlation X_2*F_1 : ", cross_correlation1D(X_2, F_1))
 print("Convolution X_3*F_1 : ", convolution1D(X_3, F_1)) #[80, 120, 170, 230, 280]
-print("Convolution X_3*F_1_norm : ", convolution1D(X_3, F_1_norm),'\n') #[20.0, 30.0, 42.5, 57.5, 70.0]
+print("Convolution X_3*F_1_norm : ", convolution1D(X_3, F_1_norm)) #[20.0, 30.0, 42.5, 57.5, 70.0]
+print("Cross_correlation X_3*F_1 : ", cross_correlation1D(X_3, F_1), '\n')
 
 # # Convolution avec F_2
+"""
+
+"""
 print("Convolution avec F_2 = [-1,2,-1]") #[-1,2,-1]
 print("Convolution X_1*F_2 : ", convolution1D(X_1, F_2)) #[-80, 0, 0, 0, -80]
+print("Cross_correlation X_1*F_2 : ", cross_correlation1D(X_1, F_2))
 print("Convolution X_2*F_2 : ", convolution1D(X_2, F_2)) #[-30, 0, -20, 0, -30]
-print("Convolution X_3*F_2 : ", convolution1D(X_3, F_2),'\n') #[0, 0, -10, 10, 0]
+print("Cross_correlation X_2*F_2 : ", cross_correlation1D(X_2, F_2))
+print("Convolution X_3*F_2 : ", convolution1D(X_3, F_2)) #[0, 0, -10, 10, 0]
+print("Cross_correlation X_3*F_2 : ", cross_correlation1D(X_3, F_2),'\n')
 
 # # Convolution avec F_3
+"""
+
+"""
 print("Convolution avec F_3 = [0,1,2]")
 print("Convolution X_1*F_3 : ", convolution1D(X_1, F_3)) #[160, 0, 0, 0, 0]
+print("Cross_correlation X_1*F_3 : ", cross_correlation1D(X_1, F_3))
+print("Cross_correlation X_1*F_3_inv : ", cross_correlation1D(X_1, F_3_inv))
 print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
+print("Cross_correlation X_2*F_3 : ", cross_correlation1D(X_2, F_3))
+print("Cross_correlation X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv))
 print("Convolution X_3*F_3 : ", convolution1D(X_3, F_3)) #[40, 70, 100, 140, 190]
+print("Cross_correlation X_3*F_3 : ", cross_correlation1D(X_1, F_3))
 print("Convolution X_3*F_3_inv : ", convolution1D(X_3, F_3_inv),'\n') #[80, 110, 160, 200, 230]
 
 # # Comparaison entre convolution et cross_correlation
@@ -153,6 +173,10 @@ print("Comparaison entre convolution et cross_correlation sur filtres inverses")
 print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
 print("Convolution X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv)) #[140, 50, 20, 10, 40]
 
+
+"""
+Les fonctions convolution1D(X, F) et cross_correlation1D(X', F') sont égales Pour X=X' et F' l'inverse de F
+"""
 #%% Exercice 2 : Padding
 
 
