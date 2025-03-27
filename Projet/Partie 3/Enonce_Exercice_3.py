@@ -2,6 +2,7 @@ from PIL import Image
 import numpy as np
 from matplotlib.pyplot import imshow, get_cmap
 import matplotlib.pyplot as plt
+import math
 
 # Open the image from the working directory
 image = Image.open('gr_cathedrale.png')
@@ -37,9 +38,14 @@ affiche_image(X)
 
 def pooling_max(X, ratio_x, ratio_y):
     Dx, Dy = X.shape
-    Y = np.zeros((Dx/ratio_x, Dy/ratio_y))
-    for i in range(len(Y)):
-        
+    Y = np.zeros((math.ceil(Dx/ratio_x), math.ceil(Dy/ratio_y))) # math.ceil(value) arrondit la value à l'entier du dessus si value est un nombre décimal
+    Yl, Yc = Y.shape
+    for i in range(Yl):
+        for j in range(Yc):
+            valeur_associees = X[ratio_x*i:ratio_x*(i+1),ratio_y*j:ratio_y*(j+1)]
+            Y[i][j] = np.max(valeur_associees)
+    return Y
+            
 
 #%% Exercice 2 : Convolution
 # Definitions des donnees
