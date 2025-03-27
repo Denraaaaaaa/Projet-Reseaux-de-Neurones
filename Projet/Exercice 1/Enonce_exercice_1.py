@@ -111,7 +111,7 @@ il y a 2x3 + 3x3 + 3x3 + 3 = 27 paramètres
 """
 dimensions = [2, 3, 3, 3, 1]
 
-test_reseau(dimensions, 1, 0.000001, 20000)
+#test_reseau(dimensions, 1, 0.000001, 20000)
 
 #%% Reseau 2
 """
@@ -119,7 +119,7 @@ il y a 2x7 + 7x7 + 7x7+ 7 = 119 paramètres
 """
 dimensions = [2, 7, 7, 7, 1]
 
-test_reseau(dimensions, 2, 0.001, 10000)
+#test_reseau(dimensions, 2, 0.001, 10000)
 
 #%% Reseau 3
 """
@@ -127,7 +127,7 @@ il y a 2x15 + 15x15 + 15 = 270 paramètres
 """
 dimensions = [2, 15, 15, 1]
 
-test_reseau(dimensions, 3, 0.0001, 10000)    #Le plus optimal pour l'instant à 10 000 itérations fixés
+#test_reseau(dimensions, 3, 0.0001, 10000)    #Le plus optimal pour l'instant à 10 000 itérations fixés
 
 #%% Reseau 4
 """
@@ -135,7 +135,7 @@ il y a 2x3 + 3x15 + 15x15 + 15 = 291 paramètres
 """
 dimensions = [2, 3, 15, 15, 1]
 
-test_reseau(dimensions, 4, 0.0001, 10000)
+#test_reseau(dimensions, 4, 0.0001, 10000)
 
 #%% Reseau 5
 """
@@ -151,7 +151,7 @@ il y a 2x40 + 40 = 120 paramètres
 """
 dimensions = [2, 40, 1]
 
-test_reseau(dimensions, 6, 0.5, 10000)
+#test_reseau(dimensions, 6, 0.5, 10000)
 
 #%% Reseau 7
 """
@@ -159,7 +159,7 @@ il y a 2x20 + 20x20 + 20 = 460 paramètres
 """
 dimensions = [2, 20, 20, 1]
 
-test_reseau(dimensions, 7, 0.0001, 10000)
+#test_reseau(dimensions, 7, 0.0001, 10000)
 
 #%% Reseau 8
 """
@@ -167,7 +167,7 @@ il y a 2x5 + 5x4 + 4x4 + 4x4 + 4x4 + 4 = 82 paramètres
 """
 dimensions = [2, 5, 4, 4, 4, 4, 1]
 
-test_reseau(dimensions, 8, 0.5, 10000)
+#test_reseau(dimensions, 8, 0.5, 10000)
 
 #%%
 
