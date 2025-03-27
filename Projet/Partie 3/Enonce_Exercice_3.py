@@ -94,7 +94,6 @@ X_max = pooling_max(X, Dx//120, Dy//107)
 X_moy = pooling_moy(X, Dx//120, Dy//107)
 X_median = pooling_median(X, Dx//120, Dy//107)
 
-print(X_max, X_moy, X_median)
 #%% Exercice 2 : Convolution
 # Definitions des donnees
 X_1 = [80,0,0,0,0,0,80]
@@ -110,38 +109,49 @@ F_3_inv = [2,1,0]
 def convolution1D(X, F):
     N = len(X)
     H = len(F)
-    Z = []
-    for i in range(N-H):
-        Z
+    Z = [0]*(N-H+1)
+    for i in range(N-H+1):
+        for h in range(H):
+            Z[i] += X[i+H-h-1]*F[h]
+    return Z
+
+def cross_correlation1D(X, F):
+    N = len(X)
+    H = len(F)
+    Z = [0]*(N-H+1)
+    for i in range(N-H+1):
+        for h in range(H):
+            Z[i] += X[i+h]*F[h]
+    return Z
 
 # Ces lignes permettent de tester les fonctions de convolutions et cross_correlation
 # Les decommenter une fois que vos fonctions sont implementees
 # # Convolution avec F_1
-# print("Convolution avec F_1 = [1,2,1] et F_1_norm = [0.25,0.5,0.25] :")
-# print("Convolution X_1*F_1 : ", convolution1D(X_1, F_1)) #[80, 0, 0, 0, 80]
-# print("Convolution X_1*F_1_norm : ", convolution1D(X_1, F_1_norm)) # [20.0, 0.0, 0.0, 0.0, 20.0]
-# print("Convolution X_2*F_1 : ", convolution1D(X_2, F_1)) #[110, 40, 20, 40, 110]
-# print("Convolution X_2*F_1_norm : ", convolution1D(X_2, F_1_norm)) #[27.5, 10.0, 5.0, 10.0, 27.5]
-# print("Convolution X_3*F_1 : ", convolution1D(X_3, F_1)) #[80, 120, 170, 230, 280]
-# print("Convolution X_3*F_1_norm : ", convolution1D(X_3, F_1_norm),'\n') #[20.0, 30.0, 42.5, 57.5, 70.0]
+print("Convolution avec F_1 = [1,2,1] et F_1_norm = [0.25,0.5,0.25] :")
+print("Convolution X_1*F_1 : ", convolution1D(X_1, F_1)) #[80, 0, 0, 0, 80]
+print("Convolution X_1*F_1_norm : ", convolution1D(X_1, F_1_norm)) # [20.0, 0.0, 0.0, 0.0, 20.0]
+print("Convolution X_2*F_1 : ", convolution1D(X_2, F_1)) #[110, 40, 20, 40, 110]
+print("Convolution X_2*F_1_norm : ", convolution1D(X_2, F_1_norm)) #[27.5, 10.0, 5.0, 10.0, 27.5]
+print("Convolution X_3*F_1 : ", convolution1D(X_3, F_1)) #[80, 120, 170, 230, 280]
+print("Convolution X_3*F_1_norm : ", convolution1D(X_3, F_1_norm),'\n') #[20.0, 30.0, 42.5, 57.5, 70.0]
 
 # # Convolution avec F_2
-# print("Convolution avec F_2 = [-1,2,-1]") #[-1,2,-1]
-# print("Convolution X_1*F_2 : ", convolution1D(X_1, F_2)) #[-80, 0, 0, 0, -80]
-# print("Convolution X_2*F_2 : ", convolution1D(X_2, F_2)) #[-30, 0, -20, 0, -30]
-# print("Convolution X_3*F_2 : ", convolution1D(X_3, F_2),'\n') #[0, 0, -10, 10, 0] 
+print("Convolution avec F_2 = [-1,2,-1]") #[-1,2,-1]
+print("Convolution X_1*F_2 : ", convolution1D(X_1, F_2)) #[-80, 0, 0, 0, -80]
+print("Convolution X_2*F_2 : ", convolution1D(X_2, F_2)) #[-30, 0, -20, 0, -30]
+print("Convolution X_3*F_2 : ", convolution1D(X_3, F_2),'\n') #[0, 0, -10, 10, 0]
 
 # # Convolution avec F_3
-# print("Convolution avec F_3 = [0,1,2]")
-# print("Convolution X_1*F_3 : ", convolution1D(X_1, F_3)) #[160, 0, 0, 0, 0]
-# print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
-# print("Convolution X_3*F_3 : ", convolution1D(X_3, F_3)) #[40, 70, 100, 140, 190]
-# print("Convolution X_3*F_3_inv : ", convolution1D(X_3, F_3_inv),'\n') #[80, 110, 160, 200, 230]
+print("Convolution avec F_3 = [0,1,2]")
+print("Convolution X_1*F_3 : ", convolution1D(X_1, F_3)) #[160, 0, 0, 0, 0]
+print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
+print("Convolution X_3*F_3 : ", convolution1D(X_3, F_3)) #[40, 70, 100, 140, 190]
+print("Convolution X_3*F_3_inv : ", convolution1D(X_3, F_3_inv),'\n') #[80, 110, 160, 200, 230]
 
 # # Comparaison entre convolution et cross_correlation
-# print("Comparaison entre convolution et convolution sur filtres inverses")
-# print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
-# print("Convolution X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv)) #[140, 50, 20, 10, 40]
+print("Comparaison entre convolution et cross_correlation sur filtres inverses")
+print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
+print("Convolution X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv)) #[140, 50, 20, 10, 40]
 
 #%% Exercice 2 : Padding
 
