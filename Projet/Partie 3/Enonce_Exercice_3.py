@@ -38,14 +38,54 @@ affiche_image(X)
 
 def pooling_max(X, ratio_x, ratio_y):
     Dx, Dy = X.shape
-    Y = np.zeros((math.ceil(Dx/ratio_x), math.ceil(Dy/ratio_y))) # math.ceil(value) arrondit la value à l'entier du dessus si value est un nombre décimal
+    
+    # math.ceil(value) arrondit la value à l'entier du dessus si value est un nombre décimal
+    Y = np.zeros((math.ceil(Dx/ratio_x), math.ceil(Dy/ratio_y))) 
     Yl, Yc = Y.shape
     for i in range(Yl):
         for j in range(Yc):
             valeur_associees = X[ratio_x*i:ratio_x*(i+1),ratio_y*j:ratio_y*(j+1)]
-            Y[i][j] = np.max(valeur_associees)
+            
+            # np.max(array) renvoi la valeur maximale des valeurs dans l'array
+            Y[i][j] = np.max(valeur_associees) 
     return Y
             
+def pooling_moy(X, ratio_x, ratio_y):
+    Dx, Dy =X.shape
+    
+    # math.ceil(value) arrondit la value à l'entier du dessus si value est un nombre décimal
+    Y = np.zeros((math.ceil(Dx/ratio_x), math.ceil(Dy/ratio_y))) 
+    Yl, Yc = Y.shape
+    for i in range(Yl):
+        for j in range(Yc):
+            valeur_associees = X[ratio_x*i:ratio_x*(i+1),ratio_y*j:ratio_y*(j+1)]
+            
+            # np.mean(array) renvoi la valeur moyenne sur toute les valeurs dans l'array
+            Y[i][j] = np.mean(valeur_associees) 
+    return Y
+
+def pooling_median(X, ratio_x, ratio_y):
+    Dx, Dy =X.shape
+    
+    # math.ceil(value) arrondit la value à l'entier du dessus si value est un nombre décimal
+    Y = np.zeros((math.ceil(Dx/ratio_x), math.ceil(Dy/ratio_y))) 
+    Yl, Yc = Y.shape
+    for i in range(Yl):
+        for j in range(Yc):
+            valeur_associees = X[ratio_x*i:ratio_x*(i+1),ratio_y*j:ratio_y*(j+1)]
+            n = valeur_associees.size
+            if n%2==0:
+                # On remet notre array sous forme de ndarray
+                valeur_associees = valeur_associees.reshape(n)
+                # np.sort(array) range les éléments dans le array dans l'ordre croissant
+                valeur_associees = np.sort(valeur_associees)
+                m = n//2
+                # Valeur situé au milieu supérieur car les indices sont en réalité décalé de -1 (0 à n-1) donc l'indice m est l'indice du milieu supérieur et m-1 du milieu inférieur
+                Y[i][j] = valeur_associees[m]
+            else: 
+                # np.median(array) renvoi la médiane d'un array dans une direction. Elle fera très bien l'affaire dans le cas ou l'array est de taille impaire
+                Y[i][j] = np.median(valeur_associees)
+    return Y
 
 #%% Exercice 2 : Convolution
 # Definitions des donnees
