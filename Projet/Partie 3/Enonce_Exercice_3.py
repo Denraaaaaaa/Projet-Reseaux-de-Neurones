@@ -87,6 +87,14 @@ def pooling_median(X, ratio_x, ratio_y):
                 Y[i][j] = np.median(valeur_associees)
     return Y
 
+
+Dx, Dy = X.shape
+
+X_max = pooling_max(X, Dx//120, Dy//107)
+X_moy = pooling_moy(X, Dx//120, Dy//107)
+X_median = pooling_median(X, Dx//120, Dy//107)
+
+print(X_max, X_moy, X_median)
 #%% Exercice 2 : Convolution
 # Definitions des donnees
 X_1 = [80,0,0,0,0,0,80]
@@ -98,6 +106,13 @@ F_1_norm = [0.25,0.5,0.25]
 F_2 = [-1,2,-1]
 F_3 = [0,1,2]
 F_3_inv = [2,1,0]
+
+def convolution1D(X, F):
+    N = len(X)
+    H = len(F)
+    Z = []
+    for i in range(N-H):
+        Z
 
 # Ces lignes permettent de tester les fonctions de convolutions et cross_correlation
 # Les decommenter une fois que vos fonctions sont implementees
