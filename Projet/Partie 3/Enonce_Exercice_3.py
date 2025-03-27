@@ -35,7 +35,11 @@ affiche_image(X)
 
 #%% Exercice 1 : Pooling : Max, Moyen et Median
 
-
+def pooling_max(X, ratio_x, ratio_y):
+    Dx, Dy = X.shape
+    Y = np.zeros((Dx/ratio_x, Dy/ratio_y))
+    for i in range(len(Y)):
+        
 
 #%% Exercice 2 : Convolution
 # Definitions des donnees
