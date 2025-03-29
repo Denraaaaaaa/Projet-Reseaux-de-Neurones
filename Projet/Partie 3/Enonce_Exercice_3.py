@@ -221,54 +221,109 @@ print("Convolution X_1*F_1 : ", convolution1D_padding(X_1, F_1)) #[160, 80, 0, 0
 
 F_1 = [1,2,1]
 X_1 = [80,0,0,10,0,0,1,0,0,10,0,0,80]
-# print("Convolution X_1*F_1 : ", convolution1D_stride(X_1, F_1,2)) #[80, 20, 1, 1, 20]
+
+def convolution1D_stride(X, F, k):
+    N = len(X)
+    H = len(F)
+    Z = [0] * ((N-H)//k + 1)
+    for i in range((N-H)//k + 1):
+        for h in range(H):
+            j = i*k + H - 1 - h
+            Z[i] += X[j] * F[h]
+    return Z
+
+print("Convolution X_1*F_1 : ", convolution1D_stride(X_1, F_1,2)) #[80, 20, 1, 1, 20]
 
 
 #%% Exercice 2 : Convolution 2D
 
+def cross_correlation2D(X, F):
+    Dx, Dy = X.shape
+    Hx, Hy = F.shape
+    n = Dx - Hx + 1
+    p = Dy - Hy + 1
+    Z = np.zeros((n, p))
+    for i in range(n):
+        for j in range(p):
+            for h in range(1, Hx+1):
+                for k in range(1, Hy+1):
+                    Z[i][j] += X[i+h-1][j+k-1] * F[h-1][k-1]
+    return Z
+
+
+def applique_filtre(X, F):
+    img1 = Image.fromarray(X)
+    img2 = Image.fromarray(cross_correlation2D(X, F))
+    affiche_deux_images(img1, img2)
+    
 
 #%% Filtres à tester sur l'image X_pool qui est obtenue par pooling sur l'image
 ### X originale
-
-
+"""
+Pour les raisons donnée précédemment , on choisit X_pool avec le pooling_moy ou le pooling_median
+"""
+X_pool = X_median
 
 s = 5
 filtre_1 = np.ones((s,s))/100
+
+# applique_filtre(X_pool, filtre_1)
+
 
 filtre_2 = np.array([[0.0625, 0.125, 0.0625],
                      [0.125, 0.25, 0.125],
                      [0.0625, 0.125, 0.0625]])
 
+# applique_filtre(X_pool, filtre_2)  # Floute l'image.
+
+
 filtre_3 = np.array([[-1, -2, -1],
                      [0, 0, 0],
                      [1, 2, 1]])
+
+# applique_filtre(X_pool, filtre_3)  # On dirait que ça inverse les niveaux de gris (peut être de l'image avec le filtre_1) ? + Hyper flou.
+
 
 filtre_4 = np.array([[2, 0, -2],
                      [4, 0, -4],
                      [2, 0, -2]])
 
+# applique_filtre(X_pool, filtre_4)  # Donne les contours avec bcp de contraste.
+
+
 filtre_5 = np.array([[0, 0, 0],
                     [-1, 1, 0],
                     [0, 0, 0]])
 
+# applique_filtre(X_pool, filtre_5) # Donne les contours + un peu flou.
+
 # Faire varier la valeur centrale entre 0 et -200
 filtre_5 = np.array([[0, 1, 0],
-                     [1, -200, 1],
+                     [1, -3, 1],
                      [0, 1, 0]])
 
+# applique_filtre(X_pool, filtre_5)  # Inversion des niveaux de gris à partir de -3. L'image est en plus de ça un peu flouttée. Mieux vers -3/-4.
+
+
 filtre_6 = np.array([[1, 1, 1],
-                     [1, -200, 1],
+                     [1, -7, 1],
                      [1, 1, 1]])
 
+# applique_filtre(X_pool, filtre_6)  # Inversion des niveaux de gris à partir de -8. Mieux à -7 .
 
 # Faire varier la valeur centrale entre 0 et 200
 filtre_7 = np.array([[0, -1, 0],
-                     [-1, 10, -1],
+                     [-1, 5, -1],
                      [0, -1, 0]])
 
+# applique_filtre(X_pool, filtre_7) # Damarque les contours sans inverser les niveaux de gris avant 5 (le mieux est à 5).
+
+
 filtre_8 = np.array([[-1, -1, -1],
-                     [-1, 10, -1],
+                     [-1, 9, -1],
                      [-1, -1, -1]])
+
+# applique_filtre(X_pool, filtre_8) # Définit les contours. Inversion des niveaux de gris avant 9. Celle la n'est pas flou et le mieux est à 8/9.
 
 
 Filtre_9 = np.array([[0, 0, -1, 0, 0],
@@ -277,4 +332,10 @@ Filtre_9 = np.array([[0, 0, -1, 0, 0],
                      [0, 0, -1, 0, 0],
                      [0, 0, -1, 0, 0]])
 
+# applique_filtre(X_pool, Filtre_9) # Définit les contours. Inversion des niveaux de gris avant 9. Celle la n'est pas flou et le mieux est à 9.
 
+#%% Question 4
+
+"""
+
+"""
