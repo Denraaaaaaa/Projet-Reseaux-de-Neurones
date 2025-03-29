@@ -17,12 +17,14 @@ print("Nombre de nuances de gris : ", X.max())
 # Affiche l'image seule
 def affiche_image(image):
     imshow(X,cmap=get_cmap('gray'))
+    plt.show()
 
 # Definition d'une fonction qui affiche 2 imges cote a cote
 def affiche_deux_images(img1, img2):
   _, axes = plt.subplots(ncols=2)
   axes[0].imshow(img1, cmap=plt.get_cmap('gray'))
   axes[1].imshow(img2, cmap=plt.get_cmap('gray'))
+  plt.show()
 
 # Definition d'une fonction qui affiche 3 images cote a cote
 def affiche_trois_images(img1, img2, img3):
@@ -30,9 +32,9 @@ def affiche_trois_images(img1, img2, img3):
   axes[0].imshow(img1, cmap=plt.get_cmap('gray'))
   axes[1].imshow(img2, cmap=plt.get_cmap('gray'))
   axes[2].imshow(img3, cmap=plt.get_cmap('gray'))
+  plt.show()
 
-
-affiche_image(X)
+# affiche_image(image)
 
 #%% Exercice 1 : Pooling : Max, Moyen et Median
 
@@ -127,9 +129,7 @@ def cross_correlation1D(X, F):
 # Ces lignes permettent de tester les fonctions de convolutions et cross_correlation
 # Les decommenter une fois que vos fonctions sont implementees
 # # Convolution avec F_1
-"""
 
-"""
 print("Convolution avec F_1 = [1,2,1] et F_1_norm = [0.25,0.5,0.25] :")
 print("Convolution X_1*F_1 : ", convolution1D(X_1, F_1)) #[80, 0, 0, 0, 80]
 print("Convolution X_1*F_1_norm : ", convolution1D(X_1, F_1_norm)) # [20.0, 0.0, 0.0, 0.0, 20.0]
@@ -142,9 +142,7 @@ print("Convolution X_3*F_1_norm : ", convolution1D(X_3, F_1_norm)) #[20.0, 30.0,
 print("Cross_correlation X_3*F_1 : ", cross_correlation1D(X_3, F_1), '\n')
 
 # # Convolution avec F_2
-"""
 
-"""
 print("Convolution avec F_2 = [-1,2,-1]") #[-1,2,-1]
 print("Convolution X_1*F_2 : ", convolution1D(X_1, F_2)) #[-80, 0, 0, 0, -80]
 print("Cross_correlation X_1*F_2 : ", cross_correlation1D(X_1, F_2))
@@ -154,9 +152,7 @@ print("Convolution X_3*F_2 : ", convolution1D(X_3, F_2)) #[0, 0, -10, 10, 0]
 print("Cross_correlation X_3*F_2 : ", cross_correlation1D(X_3, F_2),'\n')
 
 # # Convolution avec F_3
-"""
 
-"""
 print("Convolution avec F_3 = [0,1,2]")
 print("Convolution X_1*F_3 : ", convolution1D(X_1, F_3)) #[160, 0, 0, 0, 0]
 print("Cross_correlation X_1*F_3 : ", cross_correlation1D(X_1, F_3))
@@ -177,12 +173,47 @@ print("Convolution X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv)) #[140, 50
 """
 Les fonctions convolution1D(X, F) et cross_correlation1D(X', F') sont égales Pour X=X' et F' l'inverse de F
 """
+
+# Image.fromarray(array) permet de convertir un array en une image
+
+img1 = Image.fromarray(X_max)
+img2 = Image.fromarray(X_moy)
+img3 = Image.fromarray(X_median)
+
+affiche_trois_images(img1, img2, img3)
+
+"""
+On voit lorsqu'on applique pooling_max à l'image de la cathédrale, l'image 
+produite est une image en format (120,107) et que les niveaux de gris sont
+maximal c'est-à-dire que chaque pixel est plus clair
+
+Lorsque l'on applique pooling_moy et pooling_median à l'image, les images 
+produites sont bien plus similaires entre elles que par rapport à l'image 
+produite par pooling_max. On voit cependant que l'image produite par pooling_moy
+est plus lissée (ou adouci) que l'image produite par pooling_median. On pourrait 
+donc dire que l'image produite par pooling_median est plus net mais parait donc
+plus pixelisée que l'image produite par pooling_moy.' '
+"""
+
+
 #%% Exercice 2 : Padding
 
 
 F_1 = [1,2,1]
 X_1 = [80,0,0,0,0,0,80]
-# print("Convolution X_1*F_1 : ", convolution1D_padding(X_1, F_1)) #[160, 80, 0, 0, 0, 80, 160]
+
+def convolution1D_padding(X, F):
+    N = len(X)
+    H = len(F)
+    Z = [0]*(N)
+    for i in range(N):
+        for h in range(H):
+            j = i+H-1-h-int(H/2)
+            if j >= 0 and j <= (N-1):
+                Z[i] += X[j] * F[h]
+    return Z
+            
+print("Convolution X_1*F_1 : ", convolution1D_padding(X_1, F_1)) #[160, 80, 0, 0, 0, 80, 160]
 
 
 
@@ -198,6 +229,8 @@ X_1 = [80,0,0,10,0,0,1,0,0,10,0,0,80]
 
 #%% Filtres à tester sur l'image X_pool qui est obtenue par pooling sur l'image
 ### X originale
+
+
 
 s = 5
 filtre_1 = np.ones((s,s))/100
