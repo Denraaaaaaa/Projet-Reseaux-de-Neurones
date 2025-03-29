@@ -337,5 +337,25 @@ Filtre_9 = np.array([[0, 0, -1, 0, 0],
 #%% Question 4
 
 """
+La formule de la cross_correlation en 2D s'exprime généralement ainsi :
+
+  (X ∗ F)(i, j) = ∑₍u,v₎ X(i + u, j + v) × F(u, v)
+
+ -  Cette formule signifie que pour chaque position (i, j) sur l'image X, on prend 
+    une petite région (une fenêtre) de taille égale à celle du filtre F, puis on 
+    calcule le produit élément par élément entre cette fenêtre et F, pour ensuite 
+    sommer tous ces produits.
+    
+    Le filtre F, défini par ses valeurs F(u, v), est constant et indépendant de la position (i, j).
+    Peu importe où l'on se trouve sur l'image X, on utilise exactement les mêmes coefficients F(u, v) 
+    pour calculer (X ∗ F)(i, j). On peut en déduire que le même fitre est appliqué partour sur l'image.
+    
+    En d'autres termes, la formule ne change pas en fonction de (i, j) : seule la portion de l'image X qui est couverte par la fenêtre varie, mais F reste la même à chaque application.
+    Ce qui diminue le nombre de poids à ajuster et rend le modèle plus simple.
+    
+    
+ -  Les filtres permettent de détcter des motifs partout sur l'image '
+ 
+ -  Puisque le même filtre est appliqué partout sur l'image, un motif placé n'importe où dans l'image est détécté de la même manière'
 
 """
