@@ -339,7 +339,7 @@ Filtre_9 = np.array([[0, 0, -1, 0, 0],
 """
 La formule de la cross_correlation en 2D s'exprime généralement ainsi :
 
-  (X ∗ F)(i, j) = ∑₍u,v₎ X(i + u, j + v) × F(u, v)
+(X ∗ F)(i, j) = ∑₍u,v₎ X(i + u, j + v) × F(u, v)
 
  -  Cette formule signifie que pour chaque position (i, j) sur l'image X, on prend 
     une petite région (une fenêtre) de taille égale à celle du filtre F, puis on 
