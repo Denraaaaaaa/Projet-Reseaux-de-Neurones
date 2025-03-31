@@ -96,6 +96,7 @@ X_max = pooling_max(X, Dx//120, Dy//107)
 X_moy = pooling_moy(X, Dx//120, Dy//107)
 X_median = pooling_median(X, Dx//120, Dy//107)
 
+
 #%% Exercice 2 : Convolution
 # Definitions des donnees
 X_1 = [80,0,0,0,0,0,80]
@@ -132,46 +133,76 @@ def cross_correlation1D(X, F):
 
 print("Convolution avec F_1 = [1,2,1] et F_1_norm = [0.25,0.5,0.25] :")
 print("Convolution X_1*F_1 : ", convolution1D(X_1, F_1)) #[80, 0, 0, 0, 80]
-print("Convolution X_1*F_1_norm : ", convolution1D(X_1, F_1_norm)) # [20.0, 0.0, 0.0, 0.0, 20.0]
-print("Cross_correlation X_1*F_1 : ", cross_correlation1D(X_1, F_1))
+# print("Convolution X_1*F_1_norm : ", convolution1D(X_1, F_1_norm)) # [20.0, 0.0, 0.0, 0.0, 20.0]
+# print("Cross_correlation X_1*F_1 : ", cross_correlation1D(X_1, F_1))
 print("Convolution X_2*F_1 : ", convolution1D(X_2, F_1)) #[110, 40, 20, 40, 110]
-print("Convolution X_2*F_1_norm : ", convolution1D(X_2, F_1_norm)) #[27.5, 10.0, 5.0, 10.0, 27.5]
-print("Cross_correlation X_2*F_1 : ", cross_correlation1D(X_2, F_1))
+# print("Convolution X_2*F_1_norm : ", convolution1D(X_2, F_1_norm)) #[27.5, 10.0, 5.0, 10.0, 27.5]
+# print("Cross_correlation X_2*F_1 : ", cross_correlation1D(X_2, F_1))
 print("Convolution X_3*F_1 : ", convolution1D(X_3, F_1)) #[80, 120, 170, 230, 280]
-print("Convolution X_3*F_1_norm : ", convolution1D(X_3, F_1_norm)) #[20.0, 30.0, 42.5, 57.5, 70.0]
-print("Cross_correlation X_3*F_1 : ", cross_correlation1D(X_3, F_1), '\n')
+# print("Convolution X_3*F_1_norm : ", convolution1D(X_3, F_1_norm)) #[20.0, 30.0, 42.5, 57.5, 70.0]
+# print("Cross_correlation X_3*F_1 : ", cross_correlation1D(X_3, F_1), '\n')
 
 # # Convolution avec F_2
 
 print("Convolution avec F_2 = [-1,2,-1]") #[-1,2,-1]
 print("Convolution X_1*F_2 : ", convolution1D(X_1, F_2)) #[-80, 0, 0, 0, -80]
-print("Cross_correlation X_1*F_2 : ", cross_correlation1D(X_1, F_2))
+# print("Cross_correlation X_1*F_2 : ", cross_correlation1D(X_1, F_2))
 print("Convolution X_2*F_2 : ", convolution1D(X_2, F_2)) #[-30, 0, -20, 0, -30]
-print("Cross_correlation X_2*F_2 : ", cross_correlation1D(X_2, F_2))
+# print("Cross_correlation X_2*F_2 : ", cross_correlation1D(X_2, F_2))
 print("Convolution X_3*F_2 : ", convolution1D(X_3, F_2)) #[0, 0, -10, 10, 0]
-print("Cross_correlation X_3*F_2 : ", cross_correlation1D(X_3, F_2),'\n')
+# print("Cross_correlation X_3*F_2 : ", cross_correlation1D(X_3, F_2),'\n')
 
 # # Convolution avec F_3
 
 print("Convolution avec F_3 = [0,1,2]")
 print("Convolution X_1*F_3 : ", convolution1D(X_1, F_3)) #[160, 0, 0, 0, 0]
-print("Cross_correlation X_1*F_3 : ", cross_correlation1D(X_1, F_3))
-print("Cross_correlation X_1*F_3_inv : ", cross_correlation1D(X_1, F_3_inv))
+# print("Cross_correlation X_1*F_3 : ", cross_correlation1D(X_1, F_3))
+# print("Cross_correlation X_1*F_3_inv : ", cross_correlation1D(X_1, F_3_inv)) # On voit bien que cela donne le même résultat que convolution1D
 print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
-print("Cross_correlation X_2*F_3 : ", cross_correlation1D(X_2, F_3))
-print("Cross_correlation X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv))
+# print("Cross_correlation X_2*F_3 : ", cross_correlation1D(X_2, F_3))
+# print("Cross_correlation X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv)) # On voit bien que cela donne le même résultat que convolution1D
 print("Convolution X_3*F_3 : ", convolution1D(X_3, F_3)) #[40, 70, 100, 140, 190]
-print("Cross_correlation X_3*F_3 : ", cross_correlation1D(X_1, F_3))
-print("Convolution X_3*F_3_inv : ", convolution1D(X_3, F_3_inv),'\n') #[80, 110, 160, 200, 230]
+# print("Cross_correlation X_3*F_3 : ", cross_correlation1D(X_3, F_3))
+# print("Cross_correlation X_2*F_3_inv : ", cross_correlation1D(X_3, F_3_inv)) # On voit bien que cela donne le même résultat que convolution1D
+# print("Convolution X_3*F_3_inv : ", convolution1D(X_3, F_3_inv),'\n') #[80, 110, 160, 200, 230]
 
 # # Comparaison entre convolution et cross_correlation
-print("Comparaison entre convolution et cross_correlation sur filtres inverses")
-print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
-print("Convolution X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv)) #[140, 50, 20, 10, 40]
+# print("Comparaison entre convolution et cross_correlation sur filtres inverses")
+# print("Convolution X_2*F_3 : ", convolution1D(X_2, F_3)) #[140, 50, 20, 10, 40]
+# print("Convolution X_2*F_3_inv : ", cross_correlation1D(X_2, F_3_inv)) #[140, 50, 20, 10, 40]  # On voit bien que cela donne le même résultat que convolution1D
 
+"""
+Obeservations :
+
+Filtre 1 : la première image hors mis la taille reste inchangée. Sur l'image 2, les valeurs ont été amplifiée, les valeurs faibles
+encore plus que les valeurs élevées. Sur l'image 3, on peut voir le même principe : multiplication par un facteur 8 pour 10
+et par 3.5 pour 80, après avoir essayé on voit aussi que le facteur descend à 2 si par exemple on mettait une des valeurs à 200.
+On peut d'ailleurs le voir sur le filtre directement : la valeur centrale du filtre est plus élevée que les valeurs en bordure
+
+Filtre 2 : L'image 1 voit juste ces valeurs devenir négatives, L'image 2, on peut observer qu'il y a des valeurs non-nulle et négative 
+seulement lorsqu'il y a une grosse différence entre deux valeurs côte à côte (par exemple 0 et 20 dans 0,10,20). On peut voir que le même
+principie est plus ou moins présente pour l'image 3. Ce principe ce voit d'autant plus pour X = [10,20,30,80,30,20,10] on a X*F = [0,-40,100,-40,0].
+On peut conclure que l'effet de ce filtre serait de détecter les contour ou les transitions de couleurs (grosse différence de valeur).
+On peut le voir sur le filtre directement, en effet la valeur central du filtre possède une plus grosse valeur que les valeurs en bordure qui sont de plus négative.
+Si par exemple on observe une portion d'image ou trois valeurs côte à côte sont une constante a, on aurait pour la valeurs centrale
+a*-1 + a*2 + a*-1 = 0 Ce qui montre bien l'effet de "détection de variation" du filtre.
+
+Filtre 3: D'après la forme du filtre [0,1,2], Cela signifie que, dans une fenêtre de l'image ou du signal, seule la valeur centrale et 
+celle de droite (pondérée respectivement par 1 et 2) contribuent au calcul, tandis que la valeur la plus à gauche n'est pas prise en compte (multipliée par 0).
+Puisque le filtre accorde un poids plus élevé à la valeur de droite, il met en évidence une tendance locale à l'augmentation (une pente positive) dans le signal.
+Si, dans une région donnée, les valeurs augmentent de la gauche vers la droite, la contribution de la valeur pondérée par 2 sera plus forte, ce qui fera apparaître une réponse élevée.
+À l'inverse, si les valeurs ne changent pas ou diminuent, la réponse sera faible.
+Cependant la fonction convolution1D appliquant le filtre de manière inversée il s'agira donc des valeurs de gauches 
+amplifiée et des valeurs de droite atténuée. C'est bien ce que l'on peut voir sur les 3 images, la moins évidente à voir est l'image 3 mais on voit bien qu'à
+gauche, le coefficient multiplicatif par rapport à la valeur sans le filtre est de 4 à gauche et de environ 2 à droite (il est même inférieur à 1 pour les images 1 et 2).
+"""
 
 """
 Les fonctions convolution1D(X, F) et cross_correlation1D(X', F') sont égales Pour X=X' et F' l'inverse de F
+Pour une même image, la différence entre convolution1D et cross_correlation1D est que le filtre est appliquée inversement.
+On peut le voir en avance en regardant la définition de convolution1D et cross_correlation1D : dans convolution1D, 
+Les valeurs du filtre F sont parcourus dans la somme dans le sens direct tandis que les valeurs de X sont parcourus dans le sens inverse.
+À l'inverse pour cross_correlation1D, les valeurs de X et de F sont parcourus dans le sens direct toute les deux.
 """
 
 # Image.fromarray(array) permet de convertir un array en une image
@@ -288,7 +319,7 @@ filtre_4 = np.array([[2, 0, -2],
                      [4, 0, -4],
                      [2, 0, -2]])
 
-# applique_filtre(X_pool, filtre_4)  # Donne les contours avec bcp de contraste.
+applique_filtre(X_pool, filtre_4)  # Donne les contours avec bcp de contraste.
 
 
 filtre_5 = np.array([[0, 0, 0],
