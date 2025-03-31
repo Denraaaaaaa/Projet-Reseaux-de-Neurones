@@ -346,19 +346,19 @@ filtre_5 = np.array([[0, 0, 0],
 # Le filtre soustrait de manière extrême la valeur centrale par rapport aux alentours.
 # Ce qui cause une augmentation du contraste trop élevé et donne un effet de noir et blanc.
 
-filtre_5 = np.array([[0, 1, 0],
+filtre_6 = np.array([[0, 1, 0],
                      [1, -3, 1],
                      [0, 1, 0]])
 
-# applique_filtre(X_pool, filtre_5)  # Même idée que le filtre précédent, cependant il prend en compte toutes les valeurs voisines horizontales et verticales.
+# applique_filtre(X_pool, filtre_6)  # Même idée que le filtre précédent, cependant il prend en compte toutes les valeurs voisines horizontales et verticales.
                                    # L'image est en plus de ça un peu flouttée. La disposition la plus claire et lisible est autour d'une valeur centrale de -3/-4.
 
 
-filtre_6 = np.array([[1, 1, 1],
+filtre_7 = np.array([[1, 1, 1],
                      [1, -7, 1],
                      [1, 1, 1]])
 
-# applique_filtre(X_pool, filtre_6)  # Ce filtre accentue la différence entre la valeurs centrale et les autres valeurs ce qui donne un effet de contraste élevé.
+# applique_filtre(X_pool, filtre_7)  # Ce filtre accentue la différence entre la valeurs centrale et les autres valeurs ce qui donne un effet de contraste élevé.
                                    # La disposition la plus claire et lisible est autour d'une valeur centrale de -7 (c'est d'ailleurs en fait une valeur seuuil
                                    # puisqu'au délà, l'image devient de plus en plus noir et blanche).
 
@@ -372,33 +372,33 @@ filtre_6 = np.array([[1, 1, 1],
 
 # Quand la valeur centrale est proche de 200 (en réalité un valeur proche de 20 pourrait même suffire...) :
 
-filtre_7 = np.array([[0, -1, 0],
+filtre_8 = np.array([[0, -1, 0],
                      [-1, 5, -1],
                      [0, -1, 0]])
 
-# applique_filtre(X_pool, filtre_7) # La disposition la plus claire et lisible est autour d'une valeur centrale de 5.
+# applique_filtre(X_pool, filtre_8) # La disposition la plus claire et lisible est autour d'une valeur centrale de 5.
                                     # Démarque aussi les contour en donnant plus d'importance à la valeur centrale et moins,
                                     # cependant non nulle, aux valeurs autour. L'image est plus net
 
 
 
-filtre_8 = np.array([[-1, -1, -1],
+filtre_9 = np.array([[-1, -1, -1],
                      [-1, 9, -1],
                      [-1, -1, -1]])
 
-# applique_filtre(X_pool, filtre_8) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
-                                    # Mêmes effets que le filtre 7. Prend en compte cette aussi les valeurs supérieures/inférieures gauches/droites.
+# applique_filtre(X_pool, filtre_9) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
+                                    # Mêmes effets que le filtre 8. Prend en compte cette aussi les valeurs supérieures/inférieures gauches/droites.
 
 
 
-Filtre_9 = np.array([[0, 0, -1, 0, 0],
+Filtre_10 = np.array([[0, 0, -1, 0, 0],
                      [0, 0, -1, 0, 0],
                      [-1, -1, 9, -1, -1],
                      [0, 0, -1, 0, 0],
                      [0, 0, -1, 0, 0]])
 
-# applique_filtre(X_pool, Filtre_9) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
-                                    # Mêmes effets que les filtres 7 et 8. Ne prends pas en compte les valeurs voisines diagonalement.
+# applique_filtre(X_pool, Filtre_10) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
+                                    # Mêmes effets que les filtres 8 et 9. Ne prends pas en compte les valeurs voisines diagonalement.
                                     # Ce filtre fait la même chose que les filtres précédents mais à une échelle plus large.
                                     # Ce qui permet de renforcer la définition de certaines détails.
 
