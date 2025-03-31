@@ -288,6 +288,7 @@ def applique_filtre(X, F):
     affiche_deux_images(img1, img2)
     
 
+
 #%% Filtres à tester sur l'image X_pool qui est obtenue par pooling sur l'image
 ### X originale
 """
@@ -362,6 +363,7 @@ filtre_6 = np.array([[1, 1, 1],
                                    # puisqu'au délà, l'image devient de plus en plus noir et blanche).
 
 
+
 # Faire varier la valeur centrale entre 0 et 200
 # Quand la valeur centrale est proche de 0 :
 # L'effet du filtre se base alors sur l'importance des valeurs autour du centre.
@@ -379,6 +381,7 @@ filtre_7 = np.array([[0, -1, 0],
                                     # cependant non nulle, aux valeurs autour. L'image est plus net
 
 
+
 filtre_8 = np.array([[-1, -1, -1],
                      [-1, 9, -1],
                      [-1, -1, -1]])
@@ -386,13 +389,15 @@ filtre_8 = np.array([[-1, -1, -1],
 # applique_filtre(X_pool, filtre_8) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
                                     # Mêmes effets que le filtre 7. Prend en compte cette aussi les valeurs supérieures/inférieures gauches/droites.
 
+
+
 Filtre_9 = np.array([[0, 0, -1, 0, 0],
                      [0, 0, -1, 0, 0],
                      [-1, -1, 9, -1, -1],
                      [0, 0, -1, 0, 0],
                      [0, 0, -1, 0, 0]])
 
-applique_filtre(X_pool, Filtre_9) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
+# applique_filtre(X_pool, Filtre_9) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
                                     # Mêmes effets que les filtres 7 et 8. Ne prends pas en compte les valeurs voisines diagonalement.
                                     # Ce filtre fait la même chose que les filtres précédents mais à une échelle plus large.
                                     # Ce qui permet de renforcer la définition de certaines détails.
