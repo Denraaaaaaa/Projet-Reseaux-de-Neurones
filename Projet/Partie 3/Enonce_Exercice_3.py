@@ -291,79 +291,111 @@ def applique_filtre(X, F):
 #%% Filtres à tester sur l'image X_pool qui est obtenue par pooling sur l'image
 ### X originale
 """
-Pour les raisons donnée précédemment , on choisit X_pool avec le pooling_moy ou le pooling_median
+Pour les raisons donnée précédemment, on choisit X_pool avec le pooling_moy ou le pooling_median
 """
 X_pool = X_median
 
 s = 5
 filtre_1 = np.ones((s,s))/100
 
-# applique_filtre(X_pool, filtre_1)
+# applique_filtre(X_pool, filtre_1) # Réalise une moyenne sur une fenêtre assez large. Floute l'image. Moins détaillée
 
 
 filtre_2 = np.array([[0.0625, 0.125, 0.0625],
                      [0.125, 0.25, 0.125],
                      [0.0625, 0.125, 0.0625]])
 
-# applique_filtre(X_pool, filtre_2)  # Floute l'image.
+# applique_filtre(X_pool, filtre_2)  # Pareil que le filtre 1 cependant ne floute pas uniformément, la valeur centrale a tout de même une légère prédominance.
+                                     # Le résultat est une image floutée avec une transition douce entre les zones de contraste.
 
 
 filtre_3 = np.array([[-1, -2, -1],
                      [0, 0, 0],
                      [1, 2, 1]])
 
-# applique_filtre(X_pool, filtre_3)  # On dirait que ça inverse les niveaux de gris (peut être de l'image avec le filtre_1) ? + Hyper flou.
+# applique_filtre(X_pool, filtre_3)  # Ressemble au filtre 1D n°2. Il met en évidence les zones de l'image où l'intensité du niveau de gris change brusquement de haut en bas.
+                                     # "L'inversion" des couleur (de plusieurs niveaux de gris au noir et blanc est du au faite qe pour une faible variation des niveaux de gris
+                                     # Le filtre renvoie des valeurs proches de 0 (noir) et très élevée (blanc) pour des variation élevée. D'ou cet effet de "detecteur de contour".
 
 
 filtre_4 = np.array([[2, 0, -2],
                      [4, 0, -4],
                      [2, 0, -2]])
 
-applique_filtre(X_pool, filtre_4)  # Donne les contours avec bcp de contraste.
+# applique_filtre(X_pool, filtre_4)  # Ce filtre accentue encore plus la "détection" des contours mais cette fois-ci
+                                   # des variation horizontales
 
 
 filtre_5 = np.array([[0, 0, 0],
                     [-1, 1, 0],
                     [0, 0, 0]])
 
-# applique_filtre(X_pool, filtre_5) # Donne les contours + un peu flou.
+# applique_filtre(X_pool, filtre_5) # Ce filtre regarde la différence d'intensité entre la valeur centrale et son voisin de ligne à gauche
+                                  # Cependant ce filtre ne prend pas en compte les autres valeur autour de la valeur centrale
+                                  # Il perds donc de l'information et ne rend donc pas compte des variations fines des l'image.
+                                  # Ainsi les zones où il y a peu de différence entre les valeurs reste proches du noir.
+
 
 # Faire varier la valeur centrale entre 0 et -200
+# Quand la valeur centrale est proche de 0 :
+# Le filtre n'introduit pas de forte soustraction de la valeur centrale par rapport à ses voisins.
+# L'accentuation des contour est donc faible
+
+# Quand la valeur centrale devient très négative (par exemple, tendant vers -200) :
+# Le filtre soustrait de manière extrême la valeur centrale par rapport aux alentours.
+# Ce qui cause une augmentation du contraste trop élevé et donne un effet de noir et blanc.
+
 filtre_5 = np.array([[0, 1, 0],
                      [1, -3, 1],
                      [0, 1, 0]])
 
-# applique_filtre(X_pool, filtre_5)  # Inversion des niveaux de gris à partir de -3. L'image est en plus de ça un peu flouttée. Mieux vers -3/-4.
+# applique_filtre(X_pool, filtre_5)  # Même idée que le filtre précédent, cependant il prend en compte toutes les valeurs voisines horizontales et verticales.
+                                   # L'image est en plus de ça un peu flouttée. La disposition la plus claire et lisible est autour d'une valeur centrale de -3/-4.
 
 
 filtre_6 = np.array([[1, 1, 1],
                      [1, -7, 1],
                      [1, 1, 1]])
 
-# applique_filtre(X_pool, filtre_6)  # Inversion des niveaux de gris à partir de -8. Mieux à -7 .
+# applique_filtre(X_pool, filtre_6)  # Ce filtre accentue la différence entre la valeurs centrale et les autres valeurs ce qui donne un effet de contraste élevé.
+                                   # La disposition la plus claire et lisible est autour d'une valeur centrale de -7 (c'est d'ailleurs en fait une valeur seuuil
+                                   # puisqu'au délà, l'image devient de plus en plus noir et blanche).
+
 
 # Faire varier la valeur centrale entre 0 et 200
+# Quand la valeur centrale est proche de 0 :
+# L'effet du filtre se base alors sur l'importance des valeurs autour du centre.
+# On perde l'information du centre de la partie de l'image. De plus les valeurs autour du centre étant négatives
+# Ou nul, l'image est ne noir ou blanc et tend vers le noir totale quand la valeur centrale tend vers 0
+
+# Quand la valeur centrale est proche de 200 (en réalité un valeur proche de 20 pourrait même suffire...) :
+
 filtre_7 = np.array([[0, -1, 0],
                      [-1, 5, -1],
                      [0, -1, 0]])
 
-# applique_filtre(X_pool, filtre_7) # Damarque les contours sans inverser les niveaux de gris avant 5 (le mieux est à 5).
+# applique_filtre(X_pool, filtre_7) # La disposition la plus claire et lisible est autour d'une valeur centrale de 5.
+                                    # Démarque aussi les contour en donnant plus d'importance à la valeur centrale et moins,
+                                    # cependant non nulle, aux valeurs autour. L'image est plus net
 
 
 filtre_8 = np.array([[-1, -1, -1],
                      [-1, 9, -1],
                      [-1, -1, -1]])
 
-# applique_filtre(X_pool, filtre_8) # Définit les contours. Inversion des niveaux de gris avant 9. Celle la n'est pas flou et le mieux est à 8/9.
-
+# applique_filtre(X_pool, filtre_8) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
+                                    # Mêmes effets que le filtre 7. Prend en compte cette aussi les valeurs supérieures/inférieures gauches/droites.
 
 Filtre_9 = np.array([[0, 0, -1, 0, 0],
                      [0, 0, -1, 0, 0],
-                     [-1, -1, 10, -1, -1],
+                     [-1, -1, 9, -1, -1],
                      [0, 0, -1, 0, 0],
                      [0, 0, -1, 0, 0]])
 
-# applique_filtre(X_pool, Filtre_9) # Définit les contours. Inversion des niveaux de gris avant 9. Celle la n'est pas flou et le mieux est à 9.
+applique_filtre(X_pool, Filtre_9) # La disposition la plus claire et lisible est autour d'une valeur centrale de 9.
+                                    # Mêmes effets que les filtres 7 et 8. Ne prends pas en compte les valeurs voisines diagonalement.
+                                    # Ce filtre fait la même chose que les filtres précédents mais à une échelle plus large.
+                                    # Ce qui permet de renforcer la définition de certaines détails.
 
 #%% Question 4
 
@@ -385,8 +417,7 @@ La formule de la cross_correlation en 2D s'exprime généralement ainsi :
     Ce qui diminue le nombre de poids à ajuster et rend le modèle plus simple.
     
     
- -  Les filtres permettent de détcter des motifs partout sur l'image '
- 
- -  Puisque le même filtre est appliqué partout sur l'image, un motif placé n'importe où dans l'image est détécté de la même manière'
-
+ -  Les filtres permettent de détecter des motifs partout sur l'image. En effet puisque le même filtre est glissé sur toute l'image, 
+ le réseau reconnaît un motif peu importe où il se trouve dans l'image. Ainsi, un objet déplacé d'un endroit à un autre est
+ toujours détecté de la même manière.
 """
