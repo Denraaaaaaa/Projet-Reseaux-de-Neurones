@@ -2,7 +2,7 @@
 """
 Created on Tue Apr  1 18:16:50 2025
 
-@author: remyg
+@author: remyg, adrienc, noreddineb
 """
 
 import numpy as np
@@ -14,7 +14,6 @@ def readdataset2d(fname):
         X, T = [], []
         for l in file:
             x = l.strip().split()
-            print(x)
             X.append((float(x[0]), float(x[1])))
             T.append(int(x[2]))
         T = np.reshape(np.array(T), (-1,1)) 
@@ -54,19 +53,17 @@ def initialise(X,T):
     
     W=np.random.uniform(-2, 2, size=(D,K))
     b=np.random.uniform(-2, 2, size=(1,K))
-    
-
-    
     return W,b
 
 #%% fonction Softmax
 
 def softmax(A):
-    B=[]
-    sup = np.max(A)  # Max par ligne pour stabilité
-    exp_A = np.exp(A - sup)  
-    for i in range (len(A)):
-        B.append((1/(np.sum(exp_A[i])))*exp_A[i])
+    N, P = np.shape(A)
+    B = np.zeros((N, P))
+    for i in range(N):
+        S = np.exp(A[i]-np.max(A[i]))
+        # print(S, A[i])
+        B[i] = S/np.sum(S)
     return B
 
 #%% Prédiction
@@ -76,21 +73,13 @@ def predit_proba(X,W,b):
     return np.array(Y)
 
 
-def predit_classe(Y,T):
-    N,K = np.shape(Y)
-    
-    
-    C=[]
+def predit_classe(Y):
+    N, P = np.shape(Y)
+    C = np.zeros((N, P))
     for i in range(N):
-        C_i = []
-        C.append(C_i)
-        classe = np.argmax(Y[i])
-        for j in range(K):
-            if j == classe:
-                C_i.append(1)
-            else:
-                C_i.append(0)
-    return np.array(C)
+        a = np.argmax(Y[i])
+        C[i][a] = 1
+    return C
 
 #%% Taux de précision et erreur d'entropie
 
@@ -135,7 +124,6 @@ def reseau(W,b,X,T, lr, nb_iter, int_affiche=10):
     for i in range(nb_iter):
         
         W,b = updateWb(W,b,X,Y,T,lr)
-        #print(W,b)
         
         Y[:] = predit_proba(X,W,b)
         
@@ -151,16 +139,18 @@ def reseau(W,b,X,T, lr, nb_iter, int_affiche=10):
 def test_reseau(X,T,lr,nb_iter):
     T_conv = convertit(T)
     W,b = initialise(X, T_conv)
-     
-
+    K = T_conv.shape[1]
+    
     suite_erreur,Y = reseau(W,b,X,T_conv,lr,nb_iter)
-    C = predit_classe(Y, T_conv)
+    C = predit_classe(Y)
     C_colonne = convertit_C(C)
-    plt.scatter(X[:,0], X[:,1], c=C_colonne, s = 10)
-    plt.show() 
     t = taux_precision(C_colonne, T)
-    print(t)
-    return t,W,b,C_colonne
+    plt.scatter(X[:,0], X[:,1], c=C_colonne, s = 10)
+    plt.title(f'Résulat entraînement réseau à {K} classes')
+    plt.xlabel(f"Taux de précision : {t}")
+    plt.show() 
+    print("Taux précision :", t)
+    return t, W, b, C_colonne
     
 #%% Import du jeu de données : probleme à 4 classes
 X_train, T_train = readdataset2d("probleme_4_classes")
@@ -168,7 +158,10 @@ N, D = X_train.shape
 
 # Pour la visualisation, on garde T_train sous sa forme originelle
 plt.scatter(X_train[:,0], X_train[:,1], c=T_train, s = 30)
+plt.title("Données 4 classes")
 plt.show()
+
+t, W, b, C_colonne = test_reseau(X_train, T_train, 0.08, 100)
 
 #%% Import du jeu de données : probleme à 5 classes
 X_train, T_train = readdataset2d("probleme_5_classes")
@@ -176,11 +169,10 @@ N, D = X_train.shape
 
 # Pour la visualisation, on garde T_train sous sa forme originelle
 plt.scatter(X_train[:,0], X_train[:,1], c=T_train, s = 30)
+plt.title("Données 5 classes")
 plt.show()
 
-#%% 
-
-test_reseau(X_train, T_train, 0.08, 100)
+t, W, b, C_colonne = test_reseau(X_train, T_train, 0.08, 100)
 
 #%%
 
@@ -189,10 +181,13 @@ ANALYSE pour les problèmes à 4 et 5 classes
 
 """
 
+
 #%% affichage des droites de séparation
-t,W,b,C = test_reseau(X_train, T_train, 0.08, 100)
+
+t, W, b, C = test_reseau(X_train, T_train, 0.08, 100)
 def ordonnée_classe(x,W,b,C1,C2):
     return -((W[1,C1]-W[1,C2])/(W[0,C1]-W[0,C2]))*x - (b[0,C1]-b[0,C2])/(W[0,C1]-W[0,C2])
+
 def affichage_séparation(W, b, C1, C2, c ,resolution=100):
     x_valeurs = np.linspace(-5, 5, resolution)
     y_valeurs = ordonnée_classe(x_valeurs, W, b, C1, C2)
@@ -217,16 +212,16 @@ plt.legend(loc='upper right', bbox_to_anchor=(-0.1, 1))  # Légende à droite du
 # Ajuster les limites pour laisser de l'espace à la légende
 plt.subplots_adjust(left=0.8,right=2)
 
-plt.show()
-
 plt.xlim(-8, 8) #Pour controler les dimensions du graphe
 plt.ylim(-8, 8) #Car certaines droites quasi-verticales écrasent l'axe des ordonnées
+plt.show()
 
-#%% Affichage des zones 
+#%% Affichage des zones
+
 T_conv = convertit(T_train)
-def répartition_proba(W, b, X):
+def repartition_proba(W, b, X):
     N = X.shape[0]
-    M = N * 400
+    M = N * 50
     x = np.random.uniform(np.min(X[:, 0]), np.max(X[:, 0]), M)
     y = np.random.uniform(np.min(X[:, 1]), np.max(X[:, 1]), M)
     X_new = np.zeros((M, 2))
@@ -234,14 +229,14 @@ def répartition_proba(W, b, X):
         X_new[i][0] = x[i]
         X_new[i][1] = y[i]
 
-    Sftmax = np.array(convertit_C(predit_classe(predit_proba(X_new, W, b),T_conv)))
+    Sftmax = np.array(convertit_C(predit_classe(predit_proba(X_new, W, b))))
     
     
     color = plt.scatter(X_new[:,0], X_new[:,1], c=Sftmax, s = 10)
-    #plt.colorbar(color)
+    plt.title("Répartition des classes prédites par les W et b déterminés")
     plt.show()
 
-répartition_proba(W, b, X_train)
+repartition_proba(W, b, X_train)
 
 #%% 
 """
@@ -257,12 +252,12 @@ N, D = X_train.shape
 
 # Pour la visualisation, on garde T_train sous sa forme originelle
 plt.scatter(X_train[:,0], X_train[:,1], c=T_train, s = 30)
+plt.title("Données à 6 classes")
 plt.show()
 
 #%% Initialisation des paramètres
 
 def initalise_6_classes(dimensions):
-   
     W=[]
     b=[]
     for i in range (len(dimensions)-1):
@@ -275,10 +270,14 @@ def initalise_6_classes(dimensions):
 def sigma(x):
     return 1/(1+np.exp(-x))
 
-def softmax_6(x):
-    
-    exp_x = np.exp(x)  # Soustraction de np.max pour la stabilité numérique
-    return exp_x / np.sum(exp_x, axis=1, keepdims=True)
+
+def softmax_6(A):
+    N, P = np.shape(A)
+    B = np.zeros((N, P))
+    for i in range(N):
+        S = np.exp(A[i]-np.max(A[i]))
+        B[i] = S/np.sum(S)
+    return B
 
 #%% Prédiction de la classe
 
@@ -296,6 +295,7 @@ def predit_classe_6(Y,T):
             else:
                 C_i.append(0)
     return np.array(C)
+
 
 #%% Erreur d'Entropie
 
@@ -339,14 +339,17 @@ def updateWb_6(W,b,Z,T,lr):
 
 #%% Implentation du réseau de neurones
 
-def reseau_6(W,b,Z,T, lr, nb_iter, int_affiche=10):
+def reseau_6(W, b, Z, T, lr, nb_iter, predit_proba, int_affiche=10):
+    """ 
+    On intégre la fonction predit_proba dans les parametres car une deuxieme version 
+    est proposee, etant beaucoup plus efficace que la premiere
+    """
     suite_erreur = [cross_entropy_6(Z[-1],T)]
     for i in range(nb_iter):
         
         updateWb_6(W,b,Z,T,lr)
         
-        #lr *= 0.9995
-        Z[:] = predit_proba_6(Z[0],W,b) #Sans le [:], les tableau ne seraient pas modifiés*
+        Z[:] = predit_proba(Z[0],W,b) # Sans le [:], les tableau ne seraient pas modifiés*
         
         if i % int_affiche == 0:
             erreur_iter = cross_entropy_6(Z[-1], T)
@@ -354,8 +357,9 @@ def reseau_6(W,b,Z,T, lr, nb_iter, int_affiche=10):
             suite_erreur.append(erreur_iter)
             
             if suite_erreur[-1]-suite_erreur[-2] > 2 :
-                lr *= 0.9995
-            print(lr)
+                lr *= 0.995
+                print("###")
+                print("Modfification du pas de descente :", lr)
     return suite_erreur
 
 
@@ -370,19 +374,24 @@ def affichage_fonction_erreur(suite_erreur, label= 'Erreur de cross entropy', co
     plt.legend()
     plt.show()
 
-def test_reseau(dimensions,X,T,lr,nb_iter):  
+def test_reseau_6(dimensions,X,T,lr,nb_iter, predit_proba):  
     T_conv = convertit(T)                                   # On convertit T
     W,b = initalise_6_classes(dimensions)                   # On initialise les paramètres
-    Z = predit_proba_6(X, W, b)                             # On fait une première prédiction
-    suite_erreur = reseau_6(W, b, Z, T_conv, lr, nb_iter)   # On lance le réseau
-    C_conv = predit_classe(Z[-1], T_conv)                   # On récupère la prédiction des classes
+    Z = predit_proba(X, W, b)                             # On fait une première prédiction
+    suite_erreur = reseau_6(W, b, Z, T_conv, lr, nb_iter, predit_proba)   # On lance le réseau
+    C_conv = predit_classe_6(Z[-1], T_conv)                   # On récupère la prédiction des classes
     C = convertit_C(C_conv)
-    plt.scatter(X[:,0], X[:,1], c=C, s = 10)      
-    t = taux_precision_6(C, T)                              # On calcule et affiche le taux de précision
-    print('taux de précision = ',taux_precision_6(C, T))   
+    t = taux_precision_6(C, T)                             # On calcule et affiche le taux de précision
+
+    plt.scatter(X[:,0], X[:,1], c=C, s = 10) 
+    plt.title(f'Résulat entraînement réseau à 6 classes')
+    plt.xlabel(f"Taux de précision : {t}")       
     plt.show()
+
+    print('Taux de précision = ', t) 
     affichage_fonction_erreur(suite_erreur)
-    return t
+    return t, W, b, C_colonne
+    
 
 #%% 
 
@@ -397,8 +406,8 @@ On propose ci-dessous 2 versions du réseau :
 
 #%% Version 1 : avec Softmax
 
-def predit_proba_6(X,W,b):
-    Z=[X]
+def predit_proba_softmax(X, W, b):
+    Z = [X]
     for i in range(len(W)):
         Z.append(softmax(np.dot(Z[i], W[i])+b[i]))
     return Z
@@ -406,17 +415,20 @@ def predit_proba_6(X,W,b):
 """
 On propose des paramètres efficaces pour cette version trouvés empiriquement : 
 """
-lr = 0.0005
-dimensions = [2,43,5]
-nb_iter = 10000
-test_reseau(dimensions, X_train, T_train,lr,nb_iter)
+lr = 0.005
+dimensions = [2, 43, 5]
+nb_iter = 3000
+t, W, b, C_colonne = test_reseau_6(dimensions, X_train, T_train, lr, nb_iter, predit_proba_softmax)
 
 
 #%% Version 2: avec Softmax et Sigma
-W,b = initalise_6_classes([2,2,2,5])
+""" Méthode beaucoup plus efficace en utilisant la fonction softmax et la fonction sigma
+Pour 5000 itérations : Taux de précision = 100.00 %
+"""
+W, b = initalise_6_classes([2,2,2,5])
 
-def predit_proba_6(X,W,b):
-    Z=[X]                                          #Z[0] = X
+def predit_proba_sigma(X, W, b):
+    Z = [X]                                          #Z[0] = X
     for i in range(len(W)-1):                      
         Z.append(sigma(np.dot(Z[i], W[i])+b[i]))   #On utilise sigma pour les couches cachées
     Z.append(softmax(np.dot(Z[-1], W[-1])+b[-1])) #On utilise Softmax pour la dernière couche
@@ -427,7 +439,40 @@ On propose des paramètres efficaces pour cette version trouvés empiriquement :
 """
 lr = 0.005
 dimensions = [2,80,5]
-nb_iter = 5000
-test_reseau(dimensions, X_train, T_train,lr,nb_iter)
+nb_iter = 3000
+t, W, b, C_colonne = test_reseau_6(dimensions, X_train, T_train,lr, nb_iter, predit_proba_sigma)
 
+#%% Affichage des zones pour le 6 classes
+
+def predit_classe_affichage(Y):
+    """
+    Adapté au problème de répartition
+    """
+    N, K = np.shape(Y)
+    C = np.zeros(N)
+    for i in range(N):
+        C[i] = np.argmax(Y[i])
+    return C
+        
+
+T_conv = convertit(T_train)
+def repartition_proba_6(W, b, X):
+    N = X.shape[0]
+    M = N*50
+    x = np.random.uniform(np.min(X[:, 0]), np.max(X[:, 0]), M)
+    y = np.random.uniform(np.min(X[:, 1]), np.max(X[:, 1]), M)
+    X_new = np.zeros((M, 2))
+    for i in range(M):
+        X_new[i][0] = x[i]
+        X_new[i][1] = y[i]
+    
+    Y = predit_proba_sigma(X_new, W, b)[-1]
+    C = predit_classe_affichage(Y)
+    Sftmax = np.array(C)
+    
+    plt.scatter(X_new[:,0], X_new[:,1], c=Sftmax, s = 10)
+    plt.title("Répartition des classes prédites par les W et b déterminés")
+    plt.show()
+
+repartition_proba_6(W, b, X_train)
 
